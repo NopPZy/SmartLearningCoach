@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigation } from '@react-navigation/native';
 import authApi from '../api/auth';
 import { clearAuthData, getAuthToken, getUserData } from '../utils/storage';
 
 export const useAuth = () => {
-  const navigation = useNavigation();
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -84,12 +82,6 @@ export const useAuth = () => {
       setUser(null);
       setIsAuthenticated(false);
       
-      // Navigate to login screen
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Login' }],
-      });
-      
       return { success: true };
     } catch (error) {
       console.error('Logout error:', error);
@@ -97,7 +89,7 @@ export const useAuth = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [navigation]);
+  }, []);
 
   const updateProfile = async (profileData) => {
     setIsLoading(true);

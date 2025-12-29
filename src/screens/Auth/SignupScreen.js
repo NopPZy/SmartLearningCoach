@@ -108,6 +108,13 @@ const SignupScreen = ({ navigation }) => {
     if (!result.success) {
       // Show error message
       setErrors(prev => ({ ...prev, form: result.error }));
+    } else {
+      console.log('Signup successful!');
+      // Navigate to main app after successful signup
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Tabs' }],
+      });
     }
   };
 

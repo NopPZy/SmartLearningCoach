@@ -26,10 +26,8 @@ const AppNavigator = () => {
       >
         {isFirstLaunch ? (
           <Stack.Screen name="Onboarding" component={OnboardingScreen} />
-        ) : !isAuthenticated ? (
-          <Stack.Screen name="Auth" component={StackNavigator} />
         ) : (
-          <Stack.Screen name="Main" component={StackNavigator} />
+          <Stack.Screen name="App" component={StackNavigator} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

@@ -30,6 +30,10 @@ export const authApi = {
    */
   login: async (email, password) => {
     try {
+      console.log('Attempting login with email:', email);
+      console.log('API URL:', process.env.API_URL || 'http://localhost:3000/api');
+      console.log('Login endpoint:', API_ENDPOINTS.AUTH.LOGIN);
+      
       const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, {
         email,
         password,
@@ -41,8 +45,12 @@ export const authApi = {
       await setAuthToken(token);
       await setUserData(user);
 
+      console.log('Login successful for user:', user.email);
       return { success: true, data: user };
     } catch (error) {
+      console.error('Login error details:', error);
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
       return { success: false, error: handleApiError(error) };
     }
   },

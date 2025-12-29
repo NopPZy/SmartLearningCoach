@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useAuthContext } from '../context/AuthContext';
 import { ROUTES } from '../utils/constants';
 
 // Auth Screens
@@ -21,52 +22,36 @@ import TabNavigator from './TabNavigator';
 const Stack = createStackNavigator();
 
 const StackNavigator = () => {
+  const { isAuthenticated } = useAuthContext();
+
   return (
     <Stack.Navigator
-      initialRouteName="Auth"
+      initialRouteName={isAuthenticated ? "Tabs" : ROUTES.LOGIN}
       screenOptions={{
         headerShown: false,
         gestureEnabled: true,
         cardStyle: { backgroundColor: '#F5F7FB' },
       }}
     >
-      {/* Auth Stack */}
-      <Stack.Screen name="Auth" component={AuthStack} />
-      
-      {/* Main Stack */}
-      <Stack.Screen name="Main" component={MainStack} />
+      {!isAuthenticated ? (
+        <>
+          {/* Auth Screens */}
+          <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
+          <Stack.Screen name={ROUTES.SIGNUP} component={SignupScreen} />
+          <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
+        </>
+      ) : (
+        <>
+          {/* Main Screens */}
+          <Stack.Screen name="Tabs" component={TabNavigator} />
+          <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} />
+          <Stack.Screen name={ROUTES.QUIZ} component={QuizScreen} />
+        </>
+      )}
     </Stack.Navigator>
   );
 };
 
-const AuthStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        animationEnabled: true,
-      }}
-    >
-      <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
-      <Stack.Screen name={ROUTES.SIGNUP} component={SignupScreen} />
-      <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
-    </Stack.Navigator>
-  );
-};
 
-const MainStack = () => {
-  return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-        animationEnabled: true,
-      }}
-    >
-      <Stack.Screen name="Tabs" component={TabNavigator} />
-      <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} />
-      <Stack.Screen name={ROUTES.QUIZ} component={QuizScreen} />
-    </Stack.Navigator>
-  );
-};
 
 export default StackNavigator;

@@ -80,11 +80,21 @@ const LoginScreen = ({ navigation }) => {
     if (!isValid) return;
 
     // Call login API
+    console.log('Attempting login with:', { email: formData.email, password: formData.password });
     const result = await login(formData.email, formData.password);
+    console.log('Login result:', result);
     
     if (!result.success) {
       // Show error message
+      console.log('Login failed with error:', result.error);
       setErrors(prev => ({ ...prev, form: result.error }));
+    } else {
+      console.log('Login successful!');
+      // Navigate to main app after successful login
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Tabs' }],
+      });
     }
   };
 
