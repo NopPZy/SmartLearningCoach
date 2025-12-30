@@ -24,6 +24,26 @@ const SettingsScreen = ({ navigation }) => {
   
   const [localSettings, setLocalSettings] = useState(studySettings);
   const [isSaving, setIsSaving] = useState(false);
+  const [expandedSections, setExpandedSections] = useState({
+    study: true,
+    display: true,
+    notifications: false,
+    data: false,
+    advanced: false,
+  });
+  const [fontSize, setFontSize] = useState('Medium');
+  const [notificationSettings, setNotificationSettings] = useState({
+    studyReminders: true,
+    dailyGoals: true,
+    weeklyReports: true,
+    newFeatures: false,
+    marketing: false,
+  });
+  const [backupSettings, setBackupSettings] = useState({
+    autoBackup: true,
+    backupFrequency: 'daily',
+    cloudProvider: 'google',
+  });
 
   const handleSettingChange = (key, value) => {
     setLocalSettings(prev => ({ ...prev, [key]: value }));
@@ -62,6 +82,19 @@ const SettingsScreen = ({ navigation }) => {
               autoPlayAudio: false,
             };
             setLocalSettings(defaultSettings);
+            setNotificationSettings({
+              studyReminders: true,
+              dailyGoals: true,
+              weeklyReports: true,
+              newFeatures: false,
+              marketing: false,
+            });
+            setBackupSettings({
+              autoBackup: true,
+              backupFrequency: 'daily',
+              cloudProvider: 'google',
+            });
+            setFontSize('Medium');
             await updateStudySettings(defaultSettings);
           },
         },
@@ -69,6 +102,74 @@ const SettingsScreen = ({ navigation }) => {
       { cancelable: true }
     );
   };
+
+  const toggleSection = (section) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
+  const handleNotificationChange = (key, value) => {
+    setNotificationSettings(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleBackupChange = (key, value) => {
+    setBackupSettings(prev => ({ ...prev, [key]: value }));
+  };
+
+  const handleExportData = () => {
+    Alert.alert(
+      'Export Data',
+      'Choose export format:',
+      [
+        { text: 'JSON', onPress: () => console.log('Export JSON') },
+        { text: 'CSV', onPress: () => console.log('Export CSV') },
+        { text: 'PDF', onPress: () => console.log('Export PDF') },
+        { text: 'Cancel', style: 'cancel' }
+      ]
+    );
+  };
+
+  const handleImportData = () => {
+    Alert.alert(
+      'Import Data',
+      'Warning: Importing data will replace your current flashcards. Continue?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Import', style: 'destructive', onPress: () => console.log('Import data') }
+      ]
+    );
+  };
+
+  const handleClearData = () => {
+    Alert.alert(
+      'Clear All Data',
+      'This will permanently delete all your flashcards, progress, and settings. This action cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Clear All', style: 'destructive', onPress: () => console.log('Clear all data') }
+      ]
+    );
+  };
+
+  const SectionHeader = ({ title, icon, section }) => (
+    <TouchableOpacity
+      style={styles.sectionHeader}
+      onPress={() => toggleSection(section)}
+      activeOpacity={0.7}
+    >
+      <View style={styles.sectionHeaderLeft}>
+        <Icon name={icon} size={24} color={colors.primary} />
+        <Text style={styles.sectionHeaderTitle}>{title}</Text>
+      </View>
+      <Icon 
+        name={expandedSections[section] ? 'chevron-up' : 'chevron-down'} 
+        size={24} 
+        color={colors.textSecondary} 
+      />
+    </TouchableOpacity>
+  );
 
   const studyModes = [
     { label: 'Spaced Repetition', value: 'spaced' },

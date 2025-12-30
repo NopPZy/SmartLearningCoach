@@ -13,12 +13,15 @@ import ProfileScreen from '../screens/ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
+  const [activeTab, setActiveTab] = useState(ROUTES.HOME_TAB);
+  
   return (
     <Tab.Navigator
       initialRouteName={ROUTES.HOME_TAB}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
+          let iconSize = focused ? size + 4 : size;
           
           switch (route.name) {
             case ROUTES.HOME_TAB:
@@ -37,23 +40,51 @@ const TabNavigator = () => {
               iconName = 'circle';
           }
           
-          return <Icon name={iconName} size={size} color={color} />;
+          return (
+            <View style={[
+              styles.tabIconContainer,
+              focused && styles.tabIconContainerActive
+            ]}>
+              <Icon name={iconName} size={iconSize} color={color} />
+              {focused && (
+                <View style={styles.activeIndicator} />
+              )}
+            </View>
+          );
         },
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
           backgroundColor: colors.cardBackground,
-          borderTopWidth: 1,
-          borderTopColor: colors.border,
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          borderTopWidth: 0,
+          height: 70,
+          paddingBottom: 10,
+          paddingTop: 10,
+          shadowColor: colors.black,
+          shadowOffset: {
+            width: 0,
+            height: -3,
+          },
+          shadowOpacity: 0.1,
+          shadowRadius: 4,
+          elevation: 8,
+          borderTopLeftRadius: 24,
+          borderTopRightRadius: 24,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '500',
+          fontSize: 11,
+          fontWeight: '600',
+          marginTop: 4,
+        },
+        tabBarItemStyle: {
+          paddingVertical: 4,
         },
         headerShown: false,
+        tabBarBackground: () => (
+          <View style={styles.tabBarBackground}>
+            <View style={styles.tabBarContent} />
+          </View>
+        ),
       })}
     >
       <Tab.Screen
@@ -61,6 +92,7 @@ const TabNavigator = () => {
         component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
+          tabBarAccessibilityLabel: 'Home Tab',
         }}
       />
       
@@ -69,6 +101,7 @@ const TabNavigator = () => {
         component={DashboardScreen}
         options={{
           tabBarLabel: 'Dashboard',
+          tabBarAccessibilityLabel: 'Dashboard Tab',
         }}
       />
       
@@ -77,6 +110,7 @@ const TabNavigator = () => {
         component={FlashcardsScreen}
         options={{
           tabBarLabel: 'Flashcards',
+          tabBarAccessibilityLabel: 'Flashcards Tab',
         }}
       />
       
@@ -85,10 +119,42 @@ const TabNavigator = () => {
         component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
+          tabBarAccessibilityLabel: 'Profile Tab',
         }}
       />
     </Tab.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  tabBarBackground: {
+    flex: 1,
+    backgroundColor: colors.cardBackground,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  tabBarContent: {
+    flex: 1,
+    backgroundColor: colors.cardBackground,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+  },
+  tabIconContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  tabIconContainerActive: {
+    transform: [{ scale: 1.1 }],
+  },
+  activeIndicator: {
+    position: 'absolute',
+    bottom: -8,
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.primary,
+  },
+});
 
 export default TabNavigator;

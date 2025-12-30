@@ -18,6 +18,8 @@ const Flashcard = ({
   backImage,
   category,
   difficulty,
+  mastery,
+  lastReviewed,
   isFlipped: externalIsFlipped,
   onFlip,
   onEasy,
@@ -68,7 +70,8 @@ const Flashcard = ({
   });
 
   const getDifficultyColor = () => {
-    switch (difficulty) {
+    const lowerDifficulty = difficulty?.toLowerCase();
+    switch (lowerDifficulty) {
       case 'easy':
         return colors.success;
       case 'medium':
@@ -78,6 +81,26 @@ const Flashcard = ({
       default:
         return colors.gray;
     }
+  };
+
+  const getMasteryColor = () => {
+    if (mastery >= 80) return colors.success;
+    if (mastery >= 60) return colors.warning;
+    return colors.error;
+  };
+
+  const formatLastReviewed = (date) => {
+    if (!date) return 'Never';
+    const reviewDate = new Date(date);
+    const today = new Date();
+    const diffTime = Math.abs(today - reviewDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays < 7) return `${diffDays} days ago`;
+    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
+    return reviewDate.toLocaleDateString();
   };
 
   const renderCardSide = (isBack = false) => {
@@ -96,6 +119,32 @@ const Flashcard = ({
           <View style={[styles.difficultyBadge, { backgroundColor: getDifficultyColor() }]}>
             <Text style={styles.difficultyText}>
               {difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}
+            </Text>
+          </View>
+        )}
+        
+        {mastery !== undefined && (
+          <View style={styles.masteryContainer}>
+            <View style={styles.masteryBar}>
+              <View 
+                style={[
+                  styles.masteryFill, 
+                  { 
+                    width: `${mastery}%`,
+                    backgroundColor: getMasteryColor()
+                  }
+                ]} 
+              />
+            </View>
+            <Text style={styles.masteryText}>{mastery}% Mastery</Text>
+          </View>
+        )}
+        
+        {lastReviewed && (
+          <View style={styles.lastReviewedContainer}>
+            <Icon name="clock-outline" size={14} color={colors.textSecondary} />
+            <Text style={styles.lastReviewedText}>
+              Last reviewed: {formatLastReviewed(lastReviewed)}
             </Text>
           </View>
         )}
@@ -281,6 +330,43 @@ const styles = StyleSheet.create({
   flipText: {
     fontSize: typography.sizes.sm,
     color: colors.primary,
+  },
+  masteryContainer: {
+    position: 'absolute',
+    bottom: spacing[8],
+    left: spacing[3],
+    right: spacing[3],
+    alignItems: 'center',
+  },
+  masteryBar: {
+    width: '100%',
+    height: 6,
+    backgroundColor: colors.grayLight,
+    borderRadius: 3,
+    marginBottom: spacing[1],
+  },
+  masteryFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  masteryText: {
+    fontSize: typography.sizes.xs,
+    color: colors.textSecondary,
+    fontWeight: typography.weights.medium,
+  },
+  lastReviewedContainer: {
+    position: 'absolute',
+    bottom: spacing[3],
+    left: spacing[3],
+    right: spacing[3],
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  lastReviewedText: {
+    fontSize: typography.sizes.xs,
+    color: colors.textSecondary,
+    marginLeft: spacing[1],
   },
   actions: {
     flexDirection: 'row',
