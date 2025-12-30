@@ -90,11 +90,7 @@ const LoginScreen = ({ navigation }) => {
       setErrors(prev => ({ ...prev, form: result.error }));
     } else {
       console.log('Login successful!');
-      // Navigate to main app after successful login
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Tabs' }],
-      });
+      // Navigation will be handled automatically by the navigator switching
     }
   };
 

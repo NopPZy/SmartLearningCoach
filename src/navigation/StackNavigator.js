@@ -21,35 +21,47 @@ import TabNavigator from './TabNavigator';
 
 const Stack = createStackNavigator();
 
+const AuthNavigator = () => (
+  <Stack.Navigator
+    initialRouteName={ROUTES.LOGIN}
+    screenOptions={{
+      headerShown: false,
+      gestureEnabled: true,
+      cardStyle: { backgroundColor: '#F5F7FB' },
+    }}
+  >
+    <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
+    <Stack.Screen name={ROUTES.SIGNUP} component={SignupScreen} />
+    <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
+  </Stack.Navigator>
+);
+
+const MainNavigator = () => (
+  <Stack.Navigator
+    initialRouteName="Tabs"
+    screenOptions={{
+      headerShown: false,
+      gestureEnabled: true,
+      cardStyle: { backgroundColor: '#F5F7FB' },
+    }}
+  >
+    <Stack.Screen name="Tabs" component={TabNavigator} />
+    <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} />
+    <Stack.Screen name={ROUTES.QUIZ} component={QuizScreen} />
+  </Stack.Navigator>
+);
+
 const StackNavigator = () => {
+  // For web development, skip authentication
+  const isWeb = true; // You can check Platform.OS === 'web'
+  
+  if (isWeb) {
+    return <MainNavigator />;
+  }
+
   const { isAuthenticated } = useAuthContext();
 
-  return (
-    <Stack.Navigator
-      initialRouteName={isAuthenticated ? "Tabs" : ROUTES.LOGIN}
-      screenOptions={{
-        headerShown: false,
-        gestureEnabled: true,
-        cardStyle: { backgroundColor: '#F5F7FB' },
-      }}
-    >
-      {!isAuthenticated ? (
-        <>
-          {/* Auth Screens */}
-          <Stack.Screen name={ROUTES.LOGIN} component={LoginScreen} />
-          <Stack.Screen name={ROUTES.SIGNUP} component={SignupScreen} />
-          <Stack.Screen name={ROUTES.FORGOT_PASSWORD} component={ForgotPasswordScreen} />
-        </>
-      ) : (
-        <>
-          {/* Main Screens */}
-          <Stack.Screen name="Tabs" component={TabNavigator} />
-          <Stack.Screen name={ROUTES.SETTINGS} component={SettingsScreen} />
-          <Stack.Screen name={ROUTES.QUIZ} component={QuizScreen} />
-        </>
-      )}
-    </Stack.Navigator>
-  );
+  return isAuthenticated ? <MainNavigator /> : <AuthNavigator />;
 };
 
 
