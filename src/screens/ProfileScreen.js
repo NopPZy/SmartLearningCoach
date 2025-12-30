@@ -5,45 +5,28 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Alert,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { useAuthContext } from '../context/AuthContext';
 import { useThemeContext } from '../context/ThemeContext';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import Card from '../components/Card';
-import Loader from '../components/Loader';
-import EmptyState from '../components/EmptyState';
 import globalStyles from '../styles/global';
 import colors from '../styles/colors';
 import typography from '../styles/typography';
 import spacing from '../styles/spacing';
 
 const ProfileScreen = ({ navigation }) => {
-  const { user, logout, isLoading } = useAuthContext();
   const { themeColors, toggleTheme, isDark } = useThemeContext();
-
-  const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            await logout();
-          },
-        },
-      ],
-      { cancelable: true }
-    );
+  
+  // Mock user data since we're removing authentication
+  const user = {
+    name: 'Guest User',
+    email: 'guest@example.com',
+    avatar: null
   };
+
+
 
   const handleEditProfile = () => {
     // Navigate to edit profile screen
@@ -81,21 +64,7 @@ const ProfileScreen = ({ navigation }) => {
     },
   ];
 
-  if (isLoading) {
-    return <Loader fullScreen text="Loading profile..." />;
-  }
 
-  if (!user) {
-    return (
-      <EmptyState
-        icon="account-question"
-        title="No User Found"
-        message="Please sign in to view your profile"
-        actionText="Sign In"
-        onAction={() => navigation.navigate('Login')}
-      />
-    );
-  }
 
   return (
     <View style={globalStyles.screen}>
@@ -222,14 +191,7 @@ const ProfileScreen = ({ navigation }) => {
           </TouchableOpacity>
         </Card>
 
-        {/* Logout Button */}
-        <Button
-          title="Logout"
-          onPress={handleLogout}
-          variant="danger"
-          icon={<Icon name="logout" size={20} color={colors.white} />}
-          style={styles.logoutButton}
-        />
+
       </ScrollView>
     </View>
   );
@@ -354,10 +316,7 @@ const styles = {
     color: colors.textPrimary,
     marginLeft: spacing[3],
   },
-  logoutButton: {
-    marginTop: spacing[4],
-    marginBottom: spacing[8],
-  },
+
 };
 
 export default ProfileScreen;

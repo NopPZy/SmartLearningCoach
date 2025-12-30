@@ -3,13 +3,6 @@ export const APP_VERSION = '1.0.0';
 
 // API endpoints
 export const API_ENDPOINTS = {
-  AUTH: {
-    LOGIN: '/auth/login',
-    SIGNUP: '/auth/signup',
-    LOGOUT: '/auth/logout',
-    FORGOT_PASSWORD: '/auth/forgot-password',
-    RESET_PASSWORD: '/auth/reset-password',
-  },
   FLASHCARDS: {
     GET_ALL: '/flashcards',
     CREATE: '/flashcards',
@@ -30,8 +23,6 @@ export const API_ENDPOINTS = {
 
 // Storage keys
 export const STORAGE_KEYS = {
-  AUTH_TOKEN: '@auth_token',
-  USER_DATA: '@user_data',
   THEME_MODE: '@theme_mode',
   FIRST_LAUNCH: '@first_launch',
   STUDY_SETTINGS: '@study_settings',
@@ -39,11 +30,6 @@ export const STORAGE_KEYS = {
 
 // Navigation routes
 export const ROUTES = {
-  // Auth
-  LOGIN: 'Login',
-  SIGNUP: 'Signup',
-  FORGOT_PASSWORD: 'ForgotPassword',
-  
   // Main
   DASHBOARD: 'Dashboard',
   FLASHCARDS: 'Flashcards',
@@ -78,10 +64,5 @@ export const STUDY_CONSTANTS = {
 export const ERROR_MESSAGES = {
   NETWORK_ERROR: 'Network error. Please check your connection.',
   SERVER_ERROR: 'Server error. Please try again later.',
-  INVALID_CREDENTIALS: 'Invalid email or password.',
-  EMAIL_EXISTS: 'Email already exists.',
   REQUIRED_FIELD: 'This field is required.',
-  INVALID_EMAIL: 'Please enter a valid email.',
-  PASSWORD_TOO_SHORT: 'Password must be at least 6 characters.',
-  PASSWORDS_DONT_MATCH: 'Passwords do not match.',
 };

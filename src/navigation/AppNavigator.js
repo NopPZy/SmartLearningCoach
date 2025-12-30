@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { useAuthContext } from '../context/AuthContext';
 import { useAppContext } from '../context/AppContext';
 import StackNavigator from './StackNavigator';
 import OnboardingScreen from '../screens/OnboardingScreen';
@@ -10,10 +9,9 @@ import Loader from '../components/Loader';
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-  const { isAuthenticated, isLoading: authLoading } = useAuthContext();
   const { isFirstLaunch, isLoading: appLoading } = useAppContext();
 
-  if (authLoading || appLoading) {
+  if (appLoading) {
     return <Loader fullScreen text="Loading..." />;
   }
 
