@@ -9,8 +9,9 @@ import {
   Alert,
   TextInput,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../styles/colors';
 import typography from '../styles/typography';
@@ -18,22 +19,123 @@ import spacing from '../styles/spacing';
 import Flashcard from '../components/Flashcard';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import CreateFlashcardModal from '../components/CreateFlashcardModal';
+import { flashcardsApi } from '../api/flashcards';
 
 const FlashcardsScreen = () => {
   const navigation = useNavigation();
   const [flashcards, setFlashcards] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
-  const [sortBy, setSortBy] = useState('date'); // 'date', 'category', 'difficulty'
+  const [viewMode, setViewMode] = useState('grid');
+  const [sortBy, setSortBy] = useState('date');
+  const [loading, setLoading] = useState(true);
+  const [isCreatingCard, setIsCreatingCard] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
+
+  // Enhanced mock data
+  useEffect(() => {
+    loadFlashcards();
+  }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      loadFlashcards();
+    }, [])
+  );
+
+  const loadFlashcards = async () => {
+    setLoading(true);
+    const result = await flashcardsApi.getAll();
+    
+    if (result.success) {
+      setFlashcards(result.data);
+    } else {
+      // Load mock data if API fails
+      const mockFlashcards = [
+        { 
+          id: 1, 
+          frontText: 'What is React?', 
+          backText: 'A JavaScript library for building user interfaces', 
+          category: 'Programming',
+          difficulty: 'Medium',
+          lastReviewed: '2024-01-15',
+          mastery: 75,
+          createdAt: new Date('2024-01-01')
+        },
+        { 
+          id: 2, 
+          frontText: 'Capital of France?', 
+          backText: 'Paris', 
+          category: 'Geography',
+          difficulty: 'Easy',
+          lastReviewed: '2024-01-14',
+          mastery: 90,
+          createdAt: new Date('2024-01-02')
+        },
+        { 
+          id: 3, 
+          frontText: 'What is the Pythagorean theorem?', 
+          backText: 'a² + b² = c²', 
+          category: 'Mathematics',
+          difficulty: 'Hard',
+          lastReviewed: '2024-01-13',
+          mastery: 60,
+          createdAt: new Date('2024-01-03')
+        },
+      ];
+      setFlashcards(mockFlashcards);
+    }
+    setLoading(false);
+  };
+
+  const handleCreateFlashcard = async (cardData) => {
+    setIsCreatingCard(true);
+    const result = await flashcardsApi.create(cardData);
+    setIsCreatingCard(false);
+
+    if (result.success) {
+      Alert.alert('Success', 'Flashcard created successfully!');
+      setShowCreateModal(false);
+      loadFlashcards();
+    } else {
+      Alert.alert('Error', result.error || 'Failed to create flashcard');
+    }
+  };
+
+  const handleDeleteFlashcard = (cardId) => {
+    Alert.alert(
+      'Delete Flashcard',
+      'Are you sure you want to delete this flashcard?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            const result = await flashcardsApi.delete(cardId);
+            if (result.success) {
+              setFlashcards(flashcards.filter(c => c.id !== cardId));
+              Alert.alert('Success', 'Flashcard deleted');
+            } else {
+              Alert.alert('Error', result.error || 'Failed to delete flashcard');
+            }
+          },
+        },
+      ]
+    );
+  };
 
   // Enhanced mock data
   useEffect(() => {
     const mockFlashcards = [
       { 
         id: 1, 
-        front: 'What is React?', 
-        back: 'A JavaScript library for building user interfaces', 
+        frontText: 'What is React?', 
+        backText: 'A JavaScript library for building user interfaces', 
         category: 'Programming',
         difficulty: 'Medium',
         lastReviewed: '2024-01-15',
@@ -42,8 +144,8 @@ const FlashcardsScreen = () => {
       },
       { 
         id: 2, 
-        front: 'Capital of France?', 
-        back: 'Paris', 
+        frontText: 'Capital of France?', 
+        backText: 'Paris', 
         category: 'Geography',
         difficulty: 'Easy',
         lastReviewed: '2024-01-14',
@@ -52,8 +154,8 @@ const FlashcardsScreen = () => {
       },
       { 
         id: 3, 
-        front: 'What is the Pythagorean theorem?', 
-        back: 'a² + b² = c²', 
+        frontText: 'What is the Pythagorean theorem?', 
+        backText: 'a² + b² = c²', 
         category: 'Mathematics',
         difficulty: 'Hard',
         lastReviewed: '2024-01-13',
@@ -62,8 +164,8 @@ const FlashcardsScreen = () => {
       },
       { 
         id: 4, 
-        front: 'Who wrote Romeo and Juliet?', 
-        back: 'William Shakespeare', 
+        frontText: 'Who wrote Romeo and Juliet?', 
+        backText: 'William Shakespeare', 
         category: 'Literature',
         difficulty: 'Easy',
         lastReviewed: '2024-01-12',
@@ -72,8 +174,8 @@ const FlashcardsScreen = () => {
       },
       { 
         id: 5, 
-        front: 'What is photosynthesis?', 
-        back: 'Process by which plants convert light energy into chemical energy', 
+        frontText: 'What is photosynthesis?', 
+        backText: 'Process by which plants convert light energy into chemical energy', 
         category: 'Biology',
         difficulty: 'Medium',
         lastReviewed: '2024-01-11',
@@ -88,8 +190,10 @@ const FlashcardsScreen = () => {
   const difficulties = ['Easy', 'Medium', 'Hard'];
 
   const filteredFlashcards = flashcards.filter(card => {
-    const matchesSearch = card.front.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         card.back.toLowerCase().includes(searchQuery.toLowerCase());
+    const frontText = card.frontText || card.front || '';
+    const backText = card.backText || card.back || '';
+    const matchesSearch = frontText.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         backText.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || card.category === selectedCategory;
     return matchesSearch && matchesCategory;
   }).sort((a, b) => {
@@ -106,16 +210,7 @@ const FlashcardsScreen = () => {
   });
 
   const handleAddFlashcard = () => {
-    Alert.alert(
-      'Add New Flashcard',
-      'Choose how to add your flashcard:',
-      [
-        { text: 'Manual Entry', onPress: () => console.log('Manual entry') },
-        { text: 'Import from File', onPress: () => console.log('Import file') },
-        { text: 'Use Template', onPress: () => console.log('Use template') },
-        { text: 'Cancel', style: 'cancel' }
-      ]
-    );
+    setShowCreateModal(true);
   };
 
   const handleStudyMode = () => {
@@ -147,14 +242,23 @@ const FlashcardsScreen = () => {
   const renderFlashcard = ({ item }) => (
     <View style={styles.cardContainer}>
       <Flashcard
-        frontText={item.front}
-        backText={item.back}
+        frontText={item.frontText || item.front}
+        backText={item.backText || item.back}
         category={item.category}
         difficulty={item.difficulty}
         mastery={item.mastery}
         lastReviewed={item.lastReviewed}
         showActions={true}
+        onEasy={() => flashcardsApi.review(item.id, { difficulty: 'easy' })}
+        onHard={() => flashcardsApi.review(item.id, { difficulty: 'hard' })}
       />
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteFlashcard(item.id)}
+        activeOpacity={0.7}
+      >
+        <Icon name="trash-can" size={20} color={colors.error} />
+      </TouchableOpacity>
     </View>
   );
 
@@ -220,7 +324,13 @@ const FlashcardsScreen = () => {
         </View>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.loadingText}>Loading flashcards...</Text>
+        </View>
+      ) : (
+        <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
         <View style={styles.searchContainer}>
           <Icon name="magnify" size={20} color={colors.gray} style={styles.searchIcon} />
@@ -320,8 +430,15 @@ const FlashcardsScreen = () => {
             />
           </Card>
         )}
-      </ScrollView>
-    </SafeAreaView>
+      </ScrollView>      )}
+
+      {/* Create Modal */}
+      <CreateFlashcardModal
+        visible={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
+        onSubmit={handleCreateFlashcard}
+        isLoading={isCreatingCard}
+      />    </SafeAreaView>
   );
 };
 
@@ -379,6 +496,16 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: spacing[4],
+    fontSize: typography.sizes.base,
+    color: colors.textSecondary,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -541,6 +668,19 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     marginBottom: 0,
+    position: 'relative',
+  },
+  deleteButton: {
+    position: 'absolute',
+    top: spacing[2],
+    right: spacing[2],
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    width: 40,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 3,
   },
   emptyCard: {
     marginHorizontal: spacing.lg,

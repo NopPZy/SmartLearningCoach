@@ -17,13 +17,6 @@ export const globalStyles = StyleSheet.create({
     backgroundColor: colors.cardBackground,
     borderRadius: spacing.borderRadius.lg,
     padding: spacing[4],
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
     elevation: 5,
     marginVertical: spacing[2],
   },

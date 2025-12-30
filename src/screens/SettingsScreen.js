@@ -5,6 +5,7 @@ import {
   ScrollView,
   Switch,
   Alert,
+  TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useThemeContext } from '../context/ThemeContext';
@@ -478,8 +479,7 @@ const SettingsScreen = ({ navigation }) => {
   );
 };
 
-// Add TouchableOpacity import at the top if not already there
-import { TouchableOpacity } from 'react-native';
+// TouchableOpacity import moved to top
 
 const styles = {
   settingItem: {

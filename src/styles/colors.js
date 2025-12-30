@@ -29,6 +29,13 @@ export const colors = {
   textPrimary: '#212529',
   textSecondary: '#6C757D',
   textLight: '#FFFFFF',
+
+  // Backwards-compatible nested text object used by some components
+  text: {
+    primary: '#212529',
+    secondary: '#6C757D',
+    light: '#FFFFFF',
+  },
   
   // Border
   border: '#DEE2E6',

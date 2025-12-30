@@ -229,7 +229,13 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.actionButtonsContainer}>
           <Button
             title="Start Learning Session"
-            onPress={() => console.log('Start Learning Session')}
+            onPress={() => {
+              if (studyMode === 'review' || studyMode === 'test') {
+                navigation.navigate('Quiz');
+              } else {
+                navigation.navigate('Flashcards');
+              }
+            }}
             variant="primary"
             size="large"
             icon={<Icon name="play" size={20} color={colors.white} />}

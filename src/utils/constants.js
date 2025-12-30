@@ -26,6 +26,7 @@ export const STORAGE_KEYS = {
   THEME_MODE: '@theme_mode',
   FIRST_LAUNCH: '@first_launch',
   STUDY_SETTINGS: '@study_settings',
+  FLASHCARDS: '@flashcards',
 };
 
 // Navigation routes
@@ -65,4 +66,6 @@ export const ERROR_MESSAGES = {
   NETWORK_ERROR: 'Network error. Please check your connection.',
   SERVER_ERROR: 'Server error. Please try again later.',
   REQUIRED_FIELD: 'This field is required.',
+  INVALID_CREDENTIALS: 'Invalid email or password.',
+  EMAIL_EXISTS: 'Email already exists.',
 };

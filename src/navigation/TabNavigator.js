@@ -1,5 +1,6 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import colors from '../styles/colors';
 import { ROUTES } from '../utils/constants';
@@ -13,8 +14,6 @@ import ProfileScreen from '../screens/ProfileScreen';
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const [activeTab, setActiveTab] = useState(ROUTES.HOME_TAB);
-  
   return (
     <Tab.Navigator
       initialRouteName={ROUTES.HOME_TAB}

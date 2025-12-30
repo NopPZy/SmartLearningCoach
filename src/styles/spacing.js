@@ -46,4 +46,15 @@ export const spacing = {
   },
 };
 
+// Convenience aliases (common named scales used across the codebase)
+spacing.xs = spacing[1];
+spacing.sm = spacing[2];
+spacing.md = spacing[4];
+spacing.lg = spacing[6];
+spacing.xl = spacing[8];
+spacing.xxl = spacing[10];
+
+// Also expose numeric aliases for clarity
+spacing.px = spacing.px || 1;
+
 export default spacing;

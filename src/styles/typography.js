@@ -35,6 +35,31 @@ export const typography = {
     normal: 1.5,
     relaxed: 1.75,
   },
+
+  // Common text style presets used across the app
+  h1: {
+    fontSize: 36,
+    fontWeight: '700',
+  },
+  h2: {
+    fontSize: 30,
+    fontWeight: '600',
+  },
+  h3: {
+    fontSize: 24,
+    fontWeight: '600',
+  },
+  h4: {
+    fontSize: 20,
+    fontWeight: '500',
+  },
+  body: {
+    fontSize: 16,
+    lineHeight: Math.round(16 * 1.5),
+  },
+  caption: {
+    fontSize: 14,
+  },
 };
 
 export default typography;

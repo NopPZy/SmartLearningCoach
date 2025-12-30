@@ -144,24 +144,25 @@ const Flashcard = ({
           <View style={styles.lastReviewedContainer}>
             <Icon name="clock-outline" size={14} color={colors.textSecondary} />
             <Text style={styles.lastReviewedText}>
-              Last reviewed: {formatLastReviewed(lastReviewed)}
+              {formatLastReviewed(lastReviewed)}
             </Text>
           </View>
         )}
         
         {image && (
           <View style={styles.imageContainer}>
-            {/* Image would be rendered here */}
             <Text style={styles.imagePlaceholder}>[Image]</Text>
           </View>
         )}
         
-        <Text style={styles.cardText}>{text}</Text>
+        <Text style={[styles.cardText, isBack && { color: colors.white, fontSize: typography.sizes.lg }]}>
+          {text}
+        </Text>
         
         <TouchableOpacity onPress={flipCard} style={styles.flipButton}>
           <Icon
             name="rotate-3d"
-            size={20}
+            size={18}
             color={colors.primary}
             style={styles.flipIcon}
           />
@@ -212,23 +213,26 @@ const Flashcard = ({
           <TouchableOpacity
             onPress={onHard}
             style={[styles.actionButton, styles.hardButton]}
+            activeOpacity={0.7}
           >
-            <Icon name="close" size={24} color={colors.error} />
+            <Icon name="close-circle" size={28} color={colors.error} />
             <Text style={[styles.actionText, styles.hardText]}>Hard</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
             onPress={flipCard}
             style={styles.flipActionButton}
+            activeOpacity={0.7}
           >
-            <Icon name="rotate-3d" size={24} color={colors.primary} />
+            <Icon name="rotate-3d" size={28} color={colors.primary} />
           </TouchableOpacity>
           
           <TouchableOpacity
             onPress={onEasy}
             style={[styles.actionButton, styles.easyButton]}
+            activeOpacity={0.7}
           >
-            <Icon name="check" size={24} color={colors.success} />
+            <Icon name="check-circle" size={28} color={colors.success} />
             <Text style={[styles.actionText, styles.easyText]}>Easy</Text>
           </TouchableOpacity>
         </View>
@@ -240,10 +244,11 @@ const Flashcard = ({
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
+    marginVertical: spacing[4],
   },
   cardWrapper: {
     width: '100%',
-    height: 300,
+    height: 450,
   },
   card: {
     position: 'absolute',
@@ -251,146 +256,174 @@ const styles = StyleSheet.create({
     height: '100%',
     backfaceVisibility: 'hidden',
     backgroundColor: colors.cardBackground,
-    borderRadius: spacing.borderRadius.xl,
-    padding: spacing[6],
-    shadowColor: colors.black,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 10,
+    borderRadius: 24,
+    padding: spacing[8],
+    elevation: 15,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 0, 0, 0.05)',
   },
   cardFront: {
     backgroundColor: colors.white,
+    borderColor: colors.border,
   },
   cardBack: {
+    background: 'linear-gradient(135deg, #4361EE 0%, #3A0CA3 100%)',
     backgroundColor: colors.primaryLight,
+    borderColor: colors.primary,
   },
   cardContent: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: spacing[4],
   },
   categoryBadge: {
     position: 'absolute',
-    top: spacing[3],
-    left: spacing[3],
-    backgroundColor: colors.grayLight,
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
-    borderRadius: spacing.borderRadius.full,
+    top: spacing[5],
+    left: spacing[5],
+    backgroundColor: colors.primary + '15',
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[2],
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: colors.primary + '30',
   },
   categoryText: {
-    fontSize: typography.sizes.xs,
-    color: colors.textSecondary,
+    fontSize: typography.sizes.sm,
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
   },
   difficultyBadge: {
     position: 'absolute',
-    top: spacing[3],
-    right: spacing[3],
-    paddingHorizontal: spacing[2],
-    paddingVertical: spacing[1],
-    borderRadius: spacing.borderRadius.full,
+    top: spacing[5],
+    right: spacing[5],
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[2],
+    borderRadius: 24,
+    elevation: 3,
   },
   difficultyText: {
-    fontSize: typography.sizes.xs,
+    fontSize: typography.sizes.sm,
     color: colors.white,
-    fontWeight: typography.weights.medium,
+    fontWeight: typography.weights.bold,
   },
   imageContainer: {
     width: '100%',
-    height: 120,
+    height: 140,
     backgroundColor: colors.grayLight,
-    borderRadius: spacing.borderRadius.md,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing[4],
+    marginBottom: spacing[6],
+    borderWidth: 2,
+    borderColor: colors.border,
   },
   imagePlaceholder: {
     color: colors.gray,
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.base,
   },
   cardText: {
-    fontSize: typography.sizes.xl,
+    fontSize: typography.sizes['2xl'],
+    fontWeight: typography.weights.semibold,
     color: colors.textPrimary,
     textAlign: 'center',
-    lineHeight: typography.lineHeights.relaxed * typography.sizes.xl,
+    lineHeight: typography.lineHeights.relaxed * typography.sizes['2xl'],
   },
   flipButton: {
     position: 'absolute',
-    bottom: spacing[3],
+    bottom: spacing[6],
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: colors.primary + '15',
+    paddingHorizontal: spacing[4],
+    paddingVertical: spacing[3],
+    borderRadius: 24,
+    borderWidth: 1.5,
+    borderColor: colors.primary + '40',
   },
   flipIcon: {
-    marginRight: spacing[1],
+    marginRight: spacing[2],
   },
   flipText: {
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.base,
     color: colors.primary,
+    fontWeight: typography.weights.bold,
   },
   masteryContainer: {
     position: 'absolute',
-    bottom: spacing[8],
-    left: spacing[3],
-    right: spacing[3],
+    bottom: spacing[16],
+    left: spacing[5],
+    right: spacing[5],
     alignItems: 'center',
   },
   masteryBar: {
     width: '100%',
-    height: 6,
+    height: 10,
     backgroundColor: colors.grayLight,
-    borderRadius: 3,
-    marginBottom: spacing[1],
+    borderRadius: 5,
+    marginBottom: spacing[2],
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: colors.border,
   },
   masteryFill: {
     height: '100%',
-    borderRadius: 3,
+    borderRadius: 5,
   },
   masteryText: {
-    fontSize: typography.sizes.xs,
+    fontSize: typography.sizes.sm,
     color: colors.textSecondary,
-    fontWeight: typography.weights.medium,
+    fontWeight: typography.weights.bold,
   },
   lastReviewedContainer: {
     position: 'absolute',
-    bottom: spacing[3],
-    left: spacing[3],
-    right: spacing[3],
+    bottom: spacing[6],
+    left: spacing[5],
+    right: spacing[5],
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: colors.background + '80',
+    paddingVertical: spacing[3],
+    paddingHorizontal: spacing[4],
+    borderRadius: 14,
   },
   lastReviewedText: {
-    fontSize: typography.sizes.xs,
+    fontSize: typography.sizes.sm,
     color: colors.textSecondary,
-    marginLeft: spacing[1],
+    marginLeft: spacing[2],
+    fontWeight: typography.weights.medium,
   },
   actions: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
-    marginTop: spacing[6],
-    paddingHorizontal: spacing[8],
+    marginTop: spacing[10],
+    paddingHorizontal: spacing[4],
+    gap: spacing[3],
   },
   actionButton: {
+    flex: 1,
     alignItems: 'center',
-    padding: spacing[3],
-    borderRadius: spacing.borderRadius.full,
+    padding: spacing[5],
+    borderRadius: 18,
+    borderWidth: 2.5,
+    minHeight: 100,
+    justifyContent: 'center',
   },
   hardButton: {
-    backgroundColor: `${colors.error}15`, // 15% opacity
+    backgroundColor: colors.error + '15',
+    borderColor: colors.error + '60',
   },
   easyButton: {
-    backgroundColor: `${colors.success}15`,
+    backgroundColor: colors.success + '15',
+    borderColor: colors.success + '60',
   },
   actionText: {
-    marginTop: spacing[1],
-    fontSize: typography.sizes.sm,
-    fontWeight: typography.weights.medium,
+    marginTop: spacing[2],
+    fontSize: typography.sizes.base,
+    fontWeight: typography.weights.bold,
   },
   hardText: {
     color: colors.error,
@@ -399,7 +432,15 @@ const styles = StyleSheet.create({
     color: colors.success,
   },
   flipActionButton: {
-    padding: spacing[3],
+    flex: 0.8,
+    padding: spacing[5],
+    backgroundColor: colors.primary + '15',
+    borderRadius: 18,
+    borderWidth: 2.5,
+    borderColor: colors.primary + '60',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: 100,
   },
 });
 
