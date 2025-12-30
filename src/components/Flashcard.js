@@ -155,7 +155,7 @@ const Flashcard = ({
           </View>
         )}
         
-        <Text style={[styles.cardText, isBack && { color: colors.white, fontSize: typography.sizes.lg }]}>
+        <Text style={[styles.cardText, isBack && { color: colors.white, fontSize: 24 }]}>
           {text}
         </Text>
         
@@ -212,11 +212,11 @@ const Flashcard = ({
         <View style={styles.actions}>
           <TouchableOpacity
             onPress={onHard}
-            style={[styles.actionButton, styles.hardButton]}
+            style={[styles.actionButton, styles.wrongButton]}
             activeOpacity={0.7}
           >
             <Icon name="close-circle" size={28} color={colors.error} />
-            <Text style={[styles.actionText, styles.hardText]}>Hard</Text>
+            <Text style={[styles.actionText, styles.wrongText]}>Wrong</Text>
           </TouchableOpacity>
           
           <TouchableOpacity
@@ -229,11 +229,11 @@ const Flashcard = ({
           
           <TouchableOpacity
             onPress={onEasy}
-            style={[styles.actionButton, styles.easyButton]}
+            style={[styles.actionButton, styles.rightButton]}
             activeOpacity={0.7}
           >
             <Icon name="check-circle" size={28} color={colors.success} />
-            <Text style={[styles.actionText, styles.easyText]}>Easy</Text>
+            <Text style={[styles.actionText, styles.rightText]}>Right</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -248,7 +248,7 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     width: '100%',
-    height: 450,
+    height: 550,
   },
   card: {
     position: 'absolute',
@@ -323,11 +323,11 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.base,
   },
   cardText: {
-    fontSize: typography.sizes['2xl'],
+    fontSize: 28,
     fontWeight: typography.weights.semibold,
     color: colors.textPrimary,
     textAlign: 'center',
-    lineHeight: typography.lineHeights.relaxed * typography.sizes['2xl'],
+    lineHeight: typography.lineHeights.relaxed * 28,
   },
   flipButton: {
     position: 'absolute',
@@ -409,14 +409,14 @@ const styles = StyleSheet.create({
     padding: spacing[5],
     borderRadius: 18,
     borderWidth: 2.5,
-    minHeight: 100,
+    minHeight: 120,
     justifyContent: 'center',
   },
-  hardButton: {
+  wrongButton: {
     backgroundColor: colors.error + '15',
     borderColor: colors.error + '60',
   },
-  easyButton: {
+  rightButton: {
     backgroundColor: colors.success + '15',
     borderColor: colors.success + '60',
   },
@@ -425,10 +425,10 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.base,
     fontWeight: typography.weights.bold,
   },
-  hardText: {
+  wrongText: {
     color: colors.error,
   },
-  easyText: {
+  rightText: {
     color: colors.success,
   },
   flipActionButton: {

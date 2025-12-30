@@ -1,0 +1,6 @@
+- [ ] Change button labels: "Hard" to "Wrong", "Easy" to "Right"
+- [ ] Rename styles: hardButton to wrongButton, easyButton to rightButton, hardText to wrongText, easyText to rightText
+- [ ] Increase card height from 450 to 550
+- [ ] Increase action button minHeight from 100 to 120
+- [ ] Increase card text fontSize from typography.sizes['2xl'] to 28
+- [ ] Increase back side fontSize from typography.sizes.lg to 24
